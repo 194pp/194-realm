@@ -1,6 +1,5 @@
 import React from 'react';
-// import './Person.css';
-// import styled from 'styled-components';
+import personClass from './Person.module.scss';
 
 // const StyledDiv = styled.div`
 //   width: 60%;
@@ -22,7 +21,7 @@ const person = ( props ) => {
     }
   }
   return (
-    <div>
+    <div className={personClass.Person}>
       <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
       <p>{props.children}</p>
       <input type="text" onChange={props.changed}

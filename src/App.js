@@ -83,7 +83,7 @@ class App extends Component {
     // }
 
     return (
-      <div className="App">
+      <div className={classes.App}>
         <h1>Hi, I'm a React App</h1>
         <p className={classes.red}>This is really working!</p>
         <button
