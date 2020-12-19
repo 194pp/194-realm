@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
-import classes from './App.module.scss';
-import Person from './Person/Person';
+import styles from './App.module.scss';
+import Person from '../Components/Persons/Person/Person';
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
+
+const classLister = styleObject => (...classList) =>
+  classList.reduce((list, myClass) => {
+    let output = list;
+    if (styleObject[myClass]) {
+      if (list) output += ' '; // appends a space if list is not empty
+      output += styleObject[myClass];
+      //Above: append 'myClass' from styleObject to the list if it is defined
+    }
+    return output;
+  }, '');
+
+const classes = classLister(styles);
+// <div className={classes('App', 'bold', 'd-flex-c')}> USAGE
 
 class App extends Component {
   state = {
@@ -22,13 +37,9 @@ class App extends Component {
       ...this.state.persons[personIndex]
     };
 
-    //const person = Object.assign({}, this.state.persons[personIndex])
-
     person.name = event.target.value;
-
     const persons = [...this.state.persons];
     persons[personIndex] = person;
-
     this.setState( {persons: persons} );
   }
 
@@ -58,36 +69,38 @@ class App extends Component {
 
   render() {
     let persons = null;
+    let btnClass = [styles.button];
 
     if (this.state.showPersons) {
       persons = (
-        <div >
+        <div>
           {this.state.persons.map((person, index) => {
             return <Person
-              click={() => this.deletePersonHandler(index)}
-              name={person.name}
-              age={person.age}
-              key={person.id}
-              changed={(event) => this.nameChangedHandler(event, person.id)}/>
+                click={() => this.deletePersonHandler(index)}
+                name={person.name}
+                key={person.id}
+                age={person.age}
+                changed={(event) => this.nameChangedHandler(event, person.id)}/>
           })}
         </div>
       );
+      btnClass.push(styles.red);
     }
 
-    // let classes = [];
-    // if (this.state.persons.length <= 2) {
-    //   classes.push('red');
-    // }
-    // if (this.state.persons.length <= 1) {
-    //   classes.push('bold');
-    // }
+    let classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push(styles.red);
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push(styles.bold);
+    }
 
     return (
-      <div className={classes.App}>
-        <h1>Hi, I'm a React App</h1>
-        <p className={classes.red}>This is really working!</p>
+      <div className={styles.App}>
+        <h1 className={styles.TestBorder}>194-realm.xyz</h1>
+        <p className={classes.join(' ')}>The Main Menu</p>
         <button
-          className={classes.button}
+          className={btnClass.join(' ')}
           onClick={this.togglePersonsHandler}>Toggle Persons</button>
         {persons}
       </div>
