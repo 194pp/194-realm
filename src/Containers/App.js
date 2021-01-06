@@ -1,21 +1,7 @@
 import React, { Component } from 'react';
 import styles from './App.module.scss';
-import Person from '../Components/Persons/Person/Person';
-import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
-
-const classLister = styleObject => (...classList) =>
-  classList.reduce((list, myClass) => {
-    let output = list;
-    if (styleObject[myClass]) {
-      if (list) output += ' '; // appends a space if list is not empty
-      output += styleObject[myClass];
-      //Above: append 'myClass' from styleObject to the list if it is defined
-    }
-    return output;
-  }, '');
-
-const classes = classLister(styles);
-// <div className={classes('App', 'bold', 'd-flex-c')}> USAGE
+import Persons from '../Components/Persons/Persons';
+import Cockpit from '../Components/Cockpit/Cockpit';
 
 class App extends Component {
   state = {
@@ -69,43 +55,24 @@ class App extends Component {
 
   render() {
     let persons = null;
-    let btnClass = [styles.button];
 
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-                click={() => this.deletePersonHandler(index)}
-                name={person.name}
-                key={person.id}
-                age={person.age}
-                changed={(event) => this.nameChangedHandler(event, person.id)}/>
-          })}
-        </div>
-      );
-      btnClass.push(styles.red);
-    }
-
-    let classes = [];
-    if (this.state.persons.length <= 2) {
-      classes.push(styles.red);
-    }
-    if (this.state.persons.length <= 1) {
-      classes.push(styles.bold);
+      persons = <Persons
+        persons={this.state.persons}
+        clicked={this.deletePersonHandler}
+        changed={this.nameChangedHandler} />
     }
 
     return (
       <div className={styles.App}>
-        <h1 className={styles.TestBorder}>194-realm.xyz</h1>
-        <p className={classes.join(' ')}>The Main Menu</p>
-        <button
-          className={btnClass.join(' ')}
-          onClick={this.togglePersonsHandler}>Toggle Persons</button>
+        <Cockpit
+          showPersons={this.state.showPersons}
+          persons={this.state.persons}
+          clicked={this.togglePersonsHandler}
+        />
         {persons}
       </div>
     )
-    // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
